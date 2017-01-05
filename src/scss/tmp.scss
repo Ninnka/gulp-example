@@ -1,0 +1,51 @@
+$nav-color: #F90;
+
+p {
+  $width: 80%;
+  color: $nav-color;
+  width: $width;
+}
+
+$color-333: #333;
+$color-eee: #eee;
+
+$border-w: 1px;
+$bodrer-cl: #121299;
+$border-sty: solid;
+
+.content {
+  border: $border-w $border-sty $bodrer-cl;
+
+  margin: 0 auto;
+
+  article {
+    h1 {
+      background: $nav-color;
+      color: color-333;
+    }
+
+    p {
+      margin-bottom: 30px;
+    }
+  }
+
+  aside {
+    background: $color-eee;
+  }
+}
+
+
+$color-red: #F00;
+$userlist-item-color: #991262;
+
+.userlist {
+  border: 1px dashed $color-red;
+
+  .userlist-item {
+    background: $userlist-item-color;
+    height: 100px;
+    line-height: 100px;
+    list-style: none;
+    margin: 40px auto;
+  }
+}

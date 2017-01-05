@@ -5,6 +5,9 @@ var rename = require("gulp-rename");
 var uglify = require("gulp-uglify");
 var babel = require("gulp-babel");
 var concat = require("gulp-concat");
+var browserSync = require("browser-sync")
+  .create();
+var reload = browserSync.reload;
 
 // 任务：输出文本
 gulp.task("test", function () {
@@ -26,16 +29,17 @@ gulp.task("concatjs", function () {
 
 // 任务：编译sass为css，并压缩
 gulp.task("sass", function (done) {
-  gulp.src("./src/sass/*.sass")
+  return gulp.src("./src/scss/*.scss")
     .pipe(sass())
-    .on("error", sass.logError)
     .pipe(gulp.dest("./dest/static/"))
     .pipe(minifyCss())
     .pipe(rename({
       extname: ".min.css"
     }))
     .pipe(gulp.dest("./dest/static/"))
-    .on("end", done);
+    .pipe(reload({
+      stream: true
+    }));
 });
 
 // 任务：返回一个babel转换后的流
@@ -71,18 +75,32 @@ gulp.task("babel", ["babelstream"], function () {
     .pipe(gulp.dest("./dest/static/"));
 });
 
-gulp.task("watch", function () {
-  var watchcer = gulp.watch("./src/js/*.js", []);
-  watchcer.on("change", function (event) {
-    console.log("change");
+// 检测sass文件的变化
+// gulp.task("watchsass", function () {
+//   var watchcer = gulp.watch("./src/sass/*.sass", ['sass']);
+//   // watchcer.on("change", function (event) {
+//   //   console.log("change");
+//   // });
+// });
+
+// 开启browser-sync的服务器
+gulp.task("server", ['sass'], function () {
+
+  // browser-sync设置
+  browserSync.init({
+    server: "./"
   });
+
+  gulp.watch("./src/scss/*.scss", ['sass']);
+
+  gulp.watch("./src/template/*.html")
+    .on("change", reload);
+
 });
 
 
 // 开发环境
-gulp.task("dev", ["sass"], function () {
-
-});
+gulp.task("dev", [], function () {});
 
 // 任务：复制html文件
 gulp.task("html", function () {
